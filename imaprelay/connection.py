@@ -14,7 +14,11 @@ def make_imap_connection():
     # Connect to the server
     hostname = _config.get('imap', 'hostname')
     log.info('Connecting to IMAP server {0}'.format(hostname))
-    connection = imaplib.IMAP4_SSL(hostname)
+    hostname = hostname.split(":")
+    if len(hostname) == 1:
+        connection = imaplib.IMAP4_SSL(hostname)
+    else:
+        connection = imaplib.IMAP4_SSL(hostname[0], hostname[1])
 
     # Login to our account
     username = _config.get('imap', 'username')
@@ -28,7 +32,12 @@ def make_smtp_connection():
     # Connect to the server
     hostname = _config.get('smtp', 'hostname')
     log.info('Connecting to SMTP server {0}'.format(hostname))
-    connection = smtplib.SMTP_SSL(hostname)
+    hostname = hostname.split(":")
+    if len(hostname) == 1:
+        connection = smtplib.SMTP_SSL(hostname)
+    else:
+        connection = smtplib.SMTP_SSL(hostname[0], hostname[1])
+    
 
     # Login to our account
     username = _config.get('smtp', 'username')
